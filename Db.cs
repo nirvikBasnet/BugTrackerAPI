@@ -42,7 +42,7 @@ namespace Bugtracker.DB
         }
 
         public static void RemoveBug(int id){
-            _bugs = _bugs.FindAll(bug => bug.Id == id).ToList();
+           _bugs = _bugs.Where(bug => bug.Id != id).ToList();
         }
 
 
