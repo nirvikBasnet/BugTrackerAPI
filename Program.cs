@@ -31,5 +31,20 @@ app.MapPost("/bug",async (BugDb db, Bug bug) =>{
     await db.SaveChangesAsync();
     return Results.Created($"/bug/{bug.Id}",bug);
 });
+app.MapPut("/bug/{id}", async (BugDb db, Bug updateBug,int id )=>{
+  var bug = await db.Bugs.FindAsync(id);
+  if(bug == null) return Results.NotFound();
+  bug.Title = updateBug.Title;
+  bug.Description = updateBug.Description;
+  await db.SaveChangesAsync();
+  return Results.NoContent();
+});
+app.MapDelete("/bug/{id}", async (BugDb db, int id)=>{
+   var bug = await db.Bugs.FindAsync(id);
+   if(bug == null) return Results.NotFound();
+   db.Bugs.Remove(bug);
+   await db.SaveChangesAsync();
+   return Results.Ok();
+});
 
 app.Run();
