@@ -3,8 +3,21 @@ using Microsoft.EntityFrameworkCore;
 using Bugtracker.Models;
 
 var builder = WebApplication.CreateBuilder(args);
+ //to enable db creation
+ //1. set the db string - done
+ //2. Migrate your data model to a SQLite database - [initialCreate] > Migration folder will be created
+ //3. Create db and schema
 
-builder.Services.AddDbContext<BugDb>(options => options.UseInMemoryDatabase("items"));
+var connectionString = builder.Configuration.GetConnectionString("Bugs") ?? "Data Source=Bugs.db";
+
+
+//currently we have implemented in-memory-database, now we will be using  SQLite
+
+//builder.Services.AddDbContext<BugDb>(options => options.UseInMemoryDatabase("items"));
+
+builder.Services.AddSqlite<BugDb>(connectionString);
+
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
   {
